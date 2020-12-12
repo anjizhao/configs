@@ -1,0 +1,13 @@
+{
+    "color_scheme": "Packages/User/IDLE (Flake8Lint).tmTheme",
+    "drag_text": false,
+    "font_size": 13,
+    "ignored_packages":
+    [
+    ],
+    "mini_diff": false,
+    "scroll_past_end": true,
+    "show_git_status": false,
+    "show_legacy_color_schemes": true,
+    "trim_trailing_white_space_on_save": true
+}
