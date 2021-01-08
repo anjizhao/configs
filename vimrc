@@ -11,4 +11,7 @@ set expandtab
 " strip trailing whitespace for python files
 autocmd BufWritePre *.py %s/\s\+$//e
 
+" syntax highlighting default on
+syntax on
+
 
