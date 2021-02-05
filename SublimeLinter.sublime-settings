@@ -18,7 +18,8 @@
     "show_panel_on_save": "never",
     "styles": [
         {
-            "icon": "none",
+            "icon": "dot",
+            "mark_style": "outline",
         }
-    ]
+    ],
 }
