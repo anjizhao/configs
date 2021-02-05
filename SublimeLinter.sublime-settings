@@ -1,0 +1,24 @@
+// SublimeLinter Settings - User
+{
+    "debug": true,
+    "gutter_theme": "Default",
+    "lint_mode": "save",
+    "linters": {
+        "flake8": {
+            "filter_errors": [
+                "E302", "E303", "E231", "E731",
+                "N801",
+                "D100", "D101", "D102", "D103",
+                "D202", "D205", "D208", "D209", "D210",
+                "D300", "D400", "D401", "D403"
+            ],
+        }
+    },
+    "show_marks_in_minimap": false,
+    "show_panel_on_save": "never",
+    "styles": [
+        {
+            "icon": "none",
+        }
+    ]
+}
