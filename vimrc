@@ -20,3 +20,5 @@ syntax on
 nnoremap o o<Esc>
 nnoremap O O<Esc>
 
+" go to line after last non-empty line and center vertically
+nnoremap LG G:keeppatterns?.<CR>jzz
