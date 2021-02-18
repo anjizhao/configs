@@ -1,13 +1,17 @@
 {
-    "color_scheme": "Packages/User/IDLE (Flake8Lint).tmTheme",
+    "color_scheme": "Packages/Color Scheme - Legacy/IDLE.tmTheme",
     "drag_text": false,
     "font_size": 13,
     "ignored_packages":
     [
+        "Python",  // using magicpython package instead
     ],
     "mini_diff": false,
+    "native_tabs": "disabled",
     "scroll_past_end": true,
     "show_git_status": false,
     "show_legacy_color_schemes": true,
+    "theme": "Default.sublime-theme",
+    "translate_tabs_to_spaces": true,
     "trim_trailing_white_space_on_save": true
 }
