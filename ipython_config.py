@@ -916,6 +916,7 @@ c.TerminalInteractiveShell.xmode = 'plain'
 
 #  Default: True
 # c.PlainTextFormatter.pprint = True
+c.PlainTextFormatter.pprint = False
 
 #  See also: BaseFormatter.singleton_printers
 # c.PlainTextFormatter.singleton_printers = {}
