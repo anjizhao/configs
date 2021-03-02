@@ -22,3 +22,11 @@ nnoremap O O<Esc>
 
 " go to line after last non-empty line and center vertically
 nnoremap LG G:keeppatterns?.<CR>jzz
+
+" big scroll window up/down shortcuts
+nnoremap ze 8<C-e>
+nnoremap zy 8<C-y>
+
+" enable filetype indent
+filetype indent on
+
