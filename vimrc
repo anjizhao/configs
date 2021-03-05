@@ -23,10 +23,13 @@ nnoremap O O<Esc>
 " go to line after last non-empty line and center vertically
 nnoremap LG G:keeppatterns?.<CR>jzz
 
-" big scroll window up/down shortcuts
-nnoremap ze 8<C-e>
-nnoremap zy 8<C-y>
+" zz, but scroll the window up/down a lil more
+nnoremap ze zz8<C-e>
+nnoremap zy zz8<C-y>
 
 " enable filetype indent
 filetype indent on
+
+" fix weird double-indent issue (default is shiftwidth() * 2)
+let g:pyindent_open_paren = 'shiftwidth()'
 
