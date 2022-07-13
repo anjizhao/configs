@@ -1,0 +1,24 @@
+#!/bin/bash
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+
+k8s_prompt() {
+    # IFS=$'\n\t'
+
+    RED='\001\033[0;31m\002'
+    BLUE='\001\033[0;36m\002'
+    LOUDRED='\001\033[1;41;96m\002'
+    NC='\001\033[0m\002' # No Color
+
+    # get current context without printing stderr
+    ctx=$(k config current-context 2> /dev/null)
+    if [[ $? != 0 ]]; then
+        return
+    fi
+    if [[ "$ctx" = *"prod"* ]]; then
+        echo -e "${RED}(${ctx}) ${NC}"
+    elif [[ ! $ctx ]]; then
+        return
+    else
+        echo -e "${BLUE}(${ctx}) ${NC}"
+    fi
+}

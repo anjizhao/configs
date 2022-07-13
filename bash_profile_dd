@@ -1,0 +1,90 @@
+
+source ~/.git-completion.bash
+source ~/.git-prompt.sh
+source ~/.k8s-prompt.sh
+
+# export PS1="\u@\h \w\[\033[32m\]\$(git_prompt)\[\033[00m\] \$ "
+# export PS1="\u@mbp \w\[\033[32m\]\$(git_prompt)\[\033[00m\] \$ "
+# export PS1="\u@mbp \$(k8s_prompt)\w\[\033[32m\]\$(git_prompt)\[\033[00m\] \$ "
+export PS1="\$(k8s_prompt)\u@mbp \w\[\033[32m\]\$(git_prompt)\[\033[00m\] \$ "
+
+# source bashrc
+if [ -f $HOME/.bashrc ]; then
+    source $HOME/.bashrc
+fi
+
+# start pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+if ! printf '%s' ":${PATH-}:" | grep -Fq ":${pyenv}:"
+then  # add pyenv root to path if it doesn't already exist
+    PATH="$PYENV_ROOT/bin:${PATH-}"
+fi
+eval "$(pyenv init --path)"
+eval "$(pyenv virtualenv-init -)"
+
+# start nodenv
+eval "$(nodenv init -)"
+
+# aliases
+alias ll='ls -al'
+alias k='kubectl --kubeconfig=$KUBECONFIG'
+alias kconf='k config'
+alias sublime='subl'
+alias gitbranchclean="git for-each-ref --format='%(refname:short)' refs/heads/ | grep -xve master -xve prod -xve main | xargs git branch -d"
+alias gs='git status'
+alias gd='git diff'
+alias gb='git branch'
+alias gpp='git pull --prune'
+
+# nice git log
+gl() {
+    # local fmt="%C(auto)%h %d%nAuthor: %aN <%aE>%nDate:   %ad%n%n    %s%n%Creset"
+    local fmt="%C(auto)%h%d%n%ad by %al%n%w(0,4,4)%s%n%w(0,4,4)%b%n%Creset"
+    if [[ -n "$1" ]]; then
+        command git log --format="$fmt" -n $1
+    else
+        command git log --format="$fmt" -n 3
+    fi
+}
+
+
+# Update the terminal title on every prompt shown
+update_term_title() {
+    echo -ne "\033]0;\007"
+}
+PROMPT_COMMAND="update_terminal_cwd; update_term_title"
+
+
+# Kube and context management
+list_contexts() {
+    local cur_ctx ctx_list
+    cur_ctx=$(k config current-context)
+    ctx_list=$(k config get-contexts -o name)
+    for c in $ctx_list; do
+        if [[ "${c}" = "${cur_ctx}" ]]; then
+            echo -e "\033[106m* ${c}\e[0m"
+        else
+            echo "  ${c}"
+        fi
+    done
+}
+
+kctx() {
+    if [[ -z "$1" ]]; then
+        list_contexts && return
+    fi
+    if [[ "$1" =~ ^(reset|unset)$ ]]; then
+        k config unset current-context
+        return
+    fi
+    KUBECONFIG="$TMPDIR/.kube.$1";
+    KUBECONFIG=$(mktemp $KUBECONFIG.XXXXXXX)
+    cp $HOME/.kube/config $KUBECONFIG
+    k config unset current-context
+    k config use-context $@
+    echo "Using tmp context: $KUBECONFIG";
+}
+
+export KUBECONFIG="$HOME/.kube/config"
+
+export HISTIGNORE=fg
