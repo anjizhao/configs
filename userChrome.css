@@ -1,0 +1,144 @@
+/* From: https://github.com/piroor/treestyletab/wiki/Code-snippets-for-custom-style-rules#on-firefox-69-and-later */
+
+
+/* ------- FIREFOX-WIDE THINGS ------- */
+
+/*Hide horizontal tabs at the top of the window #1349, #1672, #2147 */
+#main-window[tabsintitlebar="true"]:not([extradragspace="true"]) #TabsToolbar > .toolbar-items {
+  opacity: 0;
+  pointer-events: none;
+}
+#main-window:not([tabsintitlebar="true"]) #TabsToolbar {
+    visibility: collapse !important;
+}
+
+/*Hide top bar and move close, minimize, restore buttons to top left (MacOS Big Sur, Firefox 89+)*/
+#titlebar {
+  appearance: none !important;
+  height: 0px;
+}
+#titlebar > #toolbar-menubar {
+  margin-top: 0px;
+}
+#TabsToolbar {
+  min-width: 0 !important;
+  min-height: 0 !important;
+}
+#TabsToolbar > .titlebar-buttonbox-container {
+  display: block;
+  position: absolute;
+  top: 12px;
+  left: 0px;
+}
+
+/*Hide the "Tree Style Tab" header at the top of the sidebar*/
+#sidebar-header {
+  /* display: none; */
+  /* height: 20px; */
+}
+
+/* !important is required when there are enough tabs to cause a scrollbar */
+.tab {
+  padding-left: 0px !important;
+}
+
+/* Reduce minimum width of the sidebar #1373 */
+#sidebar-box {
+  max-width: none !important;
+  min-width: 20px !important;
+}
+
+/* ------ TREE STYLE TAB THINGS ------ */
+/* (these need to be in the tst extension settings) */
+
+/* show closebox only on hover */
+.tab:not(:hover) .closebox {
+  display: none;
+}
+
+/* Put closebox right side, even if I choose "Right side" style #1387 */
+:root.right tab-item tab-closebox {
+  order: 10000;
+}
+
+/* padding adjustments */
+tab-item tab-favicon {
+  padding-left: 0px;
+  padding-right: 20px;
+}
+
+/* no twisty */
+tab-item tab-twisty {
+  display: none;
+}
+
+/* get rid of weird padding? */
+tab-item-substance {
+  justify-content: space-around;
+}
+
+
+/* ------ USERCONTENT.CSS THINGS ------ */
+
+/* smaller shortcuts */
+.outer-wrapper .ds-top-sites .top-sites .top-sites-list .hide-for-narrow {
+  max-width: 530px;
+  height: 150px;
+  overflow: visible;
+  margin-left: auto;
+  margin-right: auto;
+  display: inline-block !important;
+}
+
+.discovery-stream.ds-layout {
+  max-width: 530px;
+}
+
+.top-site-outer .title {
+  font-size: small;
+}
+.icon.icon-pin-small {
+  display: none !important;
+}
+
+/*CHANGE NEW TAB BACKGROUND COLOUR*/
+@-moz-document url("about:newtab"), url("about:home") {
+ /* body { background-color: #e7d74b !important;} */
+}
+
+
+
+
+/* ------ CONTEXT MENU THINGS ------ */
+#context_toggleMuteTab,
+#context_pinTab,
+#context_unpinTab,
+#context_sendTabToDevice_separator,
+#context_sendTabToDevice,
+#context_bookmarkAllTabs,
+#tabContextMenu #context_moveTabOptions,
+#context_closeTabsToTheEnd,
+#context_closeOtherTabs,
+#context_undoCloseTab,
+#context-bookmarkpage,
+#context-sep-open,
+#context-bookmarklink,
+#context-openlinkinusercontext-menu,
+#context-sep-selectall,
+#context-searchselect,
+#context-sep-sendlinktodevice,
+#context-sendlinktodevice,
+#context-viewpartialsource-selection,
+#context-sendimage,
+#context-setDesktopBackground,
+#contentAreaContextMenu > menuseparator:nth-child(92) /*This is a Separator*/
+{display: none !important;}
+
+#open_link_in_foreground_yahoo_com-menuitem-_open-link-foreground {
+  -moz-box-ordinal-group: 0 !important;
+}
+
+#open_link_in_foreground_yahoo_com-menuitem-_open-link-foreground .menu-iconic-left {
+  display: none !important;
+}
+
