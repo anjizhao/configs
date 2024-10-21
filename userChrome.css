@@ -90,8 +90,8 @@ tab-item-substance {
   display: inline-block !important;
 }
 
-.discovery-stream.ds-layout {
-  max-width: 530px;
+.top-sites-list {
+  grid-template-columns: repeat(4, auto) !important;
 }
 
 .top-site-outer .title {
