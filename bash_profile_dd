@@ -88,3 +88,47 @@ kctx() {
 export KUBECONFIG="$HOME/.kube/config"
 
 export HISTIGNORE=fg
+
+# Switch to a worktree by name
+# Returns the repo root and worktrees dir (two lines) for the current repo.
+_worktree_info() {
+    local cdup toplevel repo parent
+    cdup=$(git rev-parse --show-cdup 2>/dev/null) || return 1
+    toplevel=$(cd "${cdup:-.}" && pwd)
+    if [[ "$toplevel" == */worktrees/*/* ]]; then
+        parent=$(dirname "$(dirname "$toplevel")")
+        repo=$(basename "$parent")
+        echo "$parent/$repo"
+    else
+        echo "$toplevel"
+    fi
+    echo "$(dirname "$toplevel")/worktrees/$(basename "$toplevel")"
+}
+worktree() {
+    if [[ -z "$1" ]]; then
+        git worktree list
+        return
+    fi
+    local info root wtdir
+    info=$(_worktree_info) || { echo "not in a git repo"; return 1; }
+    root=$(sed -n '1p' <<< "$info")
+    wtdir=$(sed -n '2p' <<< "$info")
+    if [[ "$1" =~ ^(main|master|prod|preprod)$ ]]; then
+        if [[ "$PWD" == "$root" || "$PWD" == "$root"/* ]]; then
+            echo "already in main repo"
+        else
+            cd "$root"
+        fi
+    elif [[ -d "$wtdir/$1" ]]; then
+        cd "$wtdir/$1"
+    else
+        echo "worktree not found: $wtdir/$1"
+    fi
+}
+_worktree() {
+    local info wtdir
+    info=$(_worktree_info 2>/dev/null) || return
+    wtdir=$(sed -n '2p' <<< "$info")
+    COMPREPLY=($(compgen -W "$(ls "$wtdir" 2>/dev/null)" -- "${COMP_WORDS[COMP_CWORD]}"))
+}
+complete -F _worktree worktree
