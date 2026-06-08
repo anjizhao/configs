@@ -20,7 +20,6 @@ then  # add pyenv root to path if it doesn't already exist
     PATH="$PYENV_ROOT/bin:${PATH-}"
 fi
 eval "$(pyenv init --path)"
-eval "$(pyenv virtualenv-init -)"
 
 # start nodenv
 eval "$(nodenv init -)"
@@ -30,11 +29,13 @@ alias ll='ls -al'
 alias k='kubectl --kubeconfig=$KUBECONFIG'
 alias kconf='k config'
 alias sublime='subl'
-alias gitbranchclean="git for-each-ref --format='%(refname:short)' refs/heads/ | grep -xve master -xve prod -xve main | xargs git branch -d"
+alias gitbranchclean="git for-each-ref --format='%(refname:short)' refs/heads/ | grep -xve master -xve prod -xve main -xve preprod | xargs git branch -d"
+alias gitbranchcleanFORCE="git for-each-ref --format='%(refname:short)' refs/heads/ | grep -xve master -xve prod -xve main -xve preprod | xargs git branch -D"
 alias gs='git status'
 alias gd='git diff'
 alias gb='git branch'
 alias gpp='git pull --prune'
+alias ccl='uv run --directory /Users/anji.zhao/code/claude-code-log claude-code-log --projects-since 7d'
 
 # nice git log
 gl() {
@@ -52,7 +53,7 @@ gl() {
 update_term_title() {
     echo -ne "\033]0;\007"
 }
-PROMPT_COMMAND="update_terminal_cwd; update_term_title"
+PROMPT_COMMAND="update_term_title"
 
 
 # Kube and context management
@@ -89,20 +90,23 @@ export KUBECONFIG="$HOME/.kube/config"
 
 export HISTIGNORE=fg
 
+
 # Switch to a worktree by name
 # Returns the repo root and worktrees dir (two lines) for the current repo.
 _worktree_info() {
-    local cdup toplevel repo parent
+    local cdup toplevel repo base
     cdup=$(git rev-parse --show-cdup 2>/dev/null) || return 1
     toplevel=$(cd "${cdup:-.}" && pwd)
     if [[ "$toplevel" == */worktrees/*/* ]]; then
-        parent=$(dirname "$(dirname "$toplevel")")
-        repo=$(basename "$parent")
-        echo "$parent/$repo"
+        # In a worktree: .../worktrees/repo/branch
+        repo=$(basename "$(dirname "$toplevel")")
+        base=$(dirname "$(dirname "$(dirname "$toplevel")")")
+        echo "$base/$repo"
+        echo "$(dirname "$toplevel")"
     else
         echo "$toplevel"
+        echo "$(dirname "$toplevel")/worktrees/$(basename "$toplevel")"
     fi
-    echo "$(dirname "$toplevel")/worktrees/$(basename "$toplevel")"
 }
 worktree() {
     if [[ -z "$1" ]]; then
@@ -132,3 +136,8 @@ _worktree() {
     COMPREPLY=($(compgen -W "$(ls "$wtdir" 2>/dev/null)" -- "${COMP_WORDS[COMP_CWORD]}"))
 }
 complete -F _worktree worktree
+
+# CLAUDE NONSENSE
+alias claude='claude --thinking-display summarized --append-system-prompt-file ~/.claude/anji-system-prompt.md --effort high --model opus[1m]'
+
+
